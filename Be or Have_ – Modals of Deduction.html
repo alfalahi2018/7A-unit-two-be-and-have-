@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Be or Have? – Modals of Deduction</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Cairo:wght@500;700&display=swap">
+<style>
+:root{--bg:#eaf6fa;--card:#fff;--ink:#16323d;--sub:#4f6b76;--be:#1f8fb0;--be2:#d6f0f8;--have:#e8741f;--have2:#ffe9d6;--ok:#2e9e5b;--bad:#d64545;--line:#bfdce6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f2430;--card:#17303d;--ink:#eaf6fa;--sub:#a9c4d0;--be:#5cc4e3;--be2:#1b4556;--have:#ffa25a;--have2:#4a3220;--ok:#5fd68c;--bad:#ff7b7b;--line:#2c4b5a}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;font-size:18px;line-height:1.35}
+.ar{font-family:"Cairo","Segoe UI",Tahoma,sans-serif;direction:rtl;color:var(--sub);font-size:.9em;display:block}
+header{padding:16px 16px 8px;text-align:center}
+h1{margin:0;font-size:1.9rem;line-height:1.1}
+h1 .b{color:var(--be)}h1 .h{color:var(--have)}
+.stars{display:inline-block;margin-top:6px;background:var(--card);border:2px solid var(--line);border-radius:99px;padding:2px 14px;font-weight:700}
+nav{display:flex;gap:6px;overflow-x:auto;padding:8px 12px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+nav button{flex:0 0 auto;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;border-radius:99px;padding:6px 14px;cursor:pointer}
+nav button[aria-selected=true]{background:var(--be);border-color:var(--be);color:#fff}
+main{max-width:620px;margin:0 auto;padding:8px 14px 40px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px;margin-bottom:14px}
+.two{display:grid;gap:12px}
+.big{border-radius:18px;padding:14px;border:3px solid}
+.big.be{background:var(--be2);border-color:var(--be)}.big.have{background:var(--have2);border-color:var(--have)}
+.big h2{margin:0;font-size:1.5rem}
+.be h2{color:var(--be)}.have h2{color:var(--have)}
+.ex{margin:6px 0 0;padding:0;list-style:none}
+.ex li{margin:6px 0}
+.chip{display:inline-block;font-weight:700;border-radius:8px;padding:0 8px;color:#fff}
+.chip.be{background:var(--be)}.chip.have{background:var(--have)}
+.trick{text-align:center;font-size:1.2rem}
+.q{font-size:1.5rem;font-weight:700;text-align:center;margin:6px 0}
+.emo{font-size:3.4rem;text-align:center;line-height:1.1}
+.opts{display:grid;gap:10px;margin-top:12px}
+.opts.row{grid-template-columns:1fr 1fr}
+.opt{font:inherit;font-weight:700;font-size:1.15rem;border:3px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:12px 8px;cursor:pointer;min-height:54px}
+.opt.be{border-color:var(--be)}.opt.have{border-color:var(--have)}
+.opt.right{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.wrong{background:var(--bad);border-color:var(--bad);color:#fff}
+.fb{min-height:64px;margin-top:12px;text-align:center}
+.next{display:block;margin:10px auto 0;font:inherit;font-weight:700;background:var(--be);color:#fff;border:0;border-radius:99px;padding:8px 26px;cursor:pointer}
+.bar{height:10px;background:var(--line);border-radius:9px;overflow:hidden;margin-bottom:10px}
+.bar i{display:block;height:100%;background:var(--ok);transition:width .3s}
+.tray{min-height:58px;border:3px dashed var(--line);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tile{font:inherit;font-weight:700;font-size:1.15rem;border:2px solid var(--be);background:var(--be2);color:var(--ink);border-radius:10px;padding:6px 12px;cursor:pointer}
+.end{text-align:center}.end .emo{font-size:4rem}
+button:focus-visible{outline:3px solid var(--have);outline-offset:2px}
+footer{text-align:center;color:var(--sub);font-size:.85rem;padding:10px 14px 24px}
+@media (min-width:560px){.two{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+<h1><span class="b">Be</span> or <span class="h">Have</span>?</h1>
+<span class="ar">هل نستخدم be أم have؟</span>
+<div class="stars">⭐ <span id="stars">0</span></div>
+</header>
+<nav role="tablist" id="nav"></nav>
+<main id="app"></main>
+<footer>Khawlah Bint Thalabah (5-9) · Created by T.Badria Alfalahi</footer>
+<script>
+var TABS=[["learn","📘 Learn","تعلّم"],["q1","🎯 Be or Have?","اختاري"],["q2","✅ Which is correct?","الجملة الصحيحة"],["q3","🕵️ Mystery","لغز التخمين"],["q4","🧩 Build it","رتّبي الجملة"]];
+var Q1=[
+["It must ___ a bird.","be","It is a bird.","هو طائر (ما هو؟) ← be"],
+["It might ___ fur.","have","It has fur.","عنده فرو (ماذا يملك؟) ← have"],
+["She could ___ scared.","be","She is scared.","هي خائفة (الحالة) ← be"],
+["He may ___ scales.","have","He has scales.","عنده حراشف ← have"],
+["You can't ___ right.","be","You are right.","أنت محق (الحالة) ← be"],
+["It must ___ a hedgehog.","be","It is a hedgehog.","هو قنفذ ← be"],
+["It can't ___ fur.","have","It has fur.","عنده فرو ← have"],
+["He must ___ a tail.","have","He has a tail.","عنده ذيل ← have"],
+["She must ___ happy.","be","She is happy.","هي سعيدة ← be"],
+["It could ___ four legs.","have","It has four legs.","عنده أربع أرجل ← have"]];
+var Q2=[
+["It must be a bird.","It must have a bird.","It must be a bird.","لا بد أنه طائر"],
+["It might have scales.","It might be scales.","It might have scales.","ربما عنده حراشف"],
+["She could be scared.","She could have scared.","She could be scared.","ربما هي خائفة"],
+["You can't have right.","You can't be right.","You can't be right.","لا يمكن أن تكون محقًّا"],
+["He may be fur.","He may have fur.","He may have fur.","ربما عنده فرو"],
+["It must have a hedgehog.","It must be a hedgehog.","It must be a hedgehog.","لا بد أنه قنفذ"]];
+var Q3=[
+["🐦","You see feathers and wings.","It must be a bird.","It must have a bird.","لا بد أنه طائر"],
+["🦔","You see spikes.","It might have a hedgehog.","It might be a hedgehog.","ربما هو قنفذ"],
+["🐟","You see shiny scales.","It could have scales.","It could be scales.","ربما عنده حراشف"],
+["🐻","You see thick fur.","It must be fur.","It must have fur.","لا بد أن عنده فرو"],
+["😱","She is shaking and hiding.","She must have scared.","She must be scared.","لا بد أنها خائفة"],
+["🙅","The answer is wrong.","You can't have right.","You can't be right.","لا يمكن أن تكوني محقة"]];
+var Q4=[
+["It must be a bird.","لا بد أنه طائر"],
+["She might be scared.","ربما هي خائفة"],
+["He could have scales.","ربما عنده حراشف"],
+["It can't have fur.","لا يمكن أن يكون عنده فرو"],
+["You may be right.","ربما أنت محق"]];
+var tab="learn",idx={},score={},app=document.getElementById("app"),nav=document.getElementById("nav");
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function el(h){var d=document.createElement("div");d.innerHTML=h;return d.firstChild}
+function total(){var s=0;for(var k in score)s+=score[k];document.getElementById("stars").textContent=s}
+function drawNav(){nav.innerHTML="";TABS.forEach(function(t){var b=document.createElement("button");b.setAttribute("role","tab");b.setAttribute("aria-selected",t[0]==tab);b.innerHTML=t[1];b.onclick=function(){tab=t[0];show()};nav.appendChild(b)})}
+function show(){drawNav();app.innerHTML="";window.scrollTo(0,0);if(tab=="learn")learn();else{if(idx[tab]==null){idx[tab]=0;score[tab]=0}step()}}
+function learn(){
+app.innerHTML='<div class="card trick"><b>Ask one question after the modal!</b><span class="ar">اسألي سؤالًا واحدًا بعد الكلمة السحرية</span>(may, might, could, can\'t, must)</div>'+
+'<div class="two"><div class="big be"><h2>be = is / are</h2><span class="ar">ما هو؟ وكيف حاله؟</span><ul class="ex"><li>It must <span class="chip be">be</span> a bird. 🐦<span class="ar">لا بد أنه طائر</span></li><li>She might <span class="chip be">be</span> scared. 😨<span class="ar">ربما هي خائفة</span></li><li>You can\'t <span class="chip be">be</span> right. ❌<span class="ar">لا يمكن أن تكون محقًّا</span></li></ul></div>'+
+'<div class="big have"><h2>have = has</h2><span class="ar">ماذا عنده؟</span><ul class="ex"><li>It must <span class="chip have">have</span> fur. 🧶<span class="ar">لا بد أن عنده فروًا</span></li><li>It could <span class="chip have">have</span> scales. 🐟<span class="ar">ربما عنده حراشف</span></li><li>He may <span class="chip have">have</span> a tail.<span class="ar">ربما عنده ذيل</span></li></ul></div></div>'+
+'<div class="card trick"><b>Magic test ✨</b><span class="ar">اختبار سحري: جرّبي is أو has</span>It must ___ a hedgehog → "It <b style="color:var(--be)">is</b> a hedgehog" ✔ → <b>be</b><br>It might ___ scales → "It <b style="color:var(--have)">has</b> scales" ✔ → <b>have</b></div>'+
+'<button class="next" id="go">Let\'s play! 🎮 · هيا نلعب</button>';
+document.getElementById("go").onclick=function(){tab="q1";show()}}
+function data(){return tab=="q1"?Q1:tab=="q2"?Q2:tab=="q3"?Q3:Q4}
+function step(){
+var D=data(),i=idx[tab];
+if(i>=D.length){var pct=score[tab]/D.length;app.innerHTML='<div class="card end"><div class="emo">'+(pct>.8?"🏆":pct>.5?"🎉":"💪")+'</div><div class="q">'+score[tab]+' / '+D.length+'</div><div>'+(pct>.8?"Amazing work!":"Good try! Play again!")+'<span class="ar">'+(pct>.8?"عمل رائع!":"محاولة جيدة! العبي مرة أخرى")+'</span></div><button class="next" id="again">Play again 🔄</button></div>';
+document.getElementById("again").onclick=function(){total();score[tab]=0;idx[tab]=0;step()};return}
+var h='<div class="card"><div class="bar"><i style="width:'+(i/D.length*100)+'%"></i></div>';
+var opts=[],fb="";
+if(tab=="q1"){var d=D[i];h+='<div class="q">'+d[0].replace("___","<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>")+'</div><div class="opts row" id="o"></div>';
+opts=[["be","be"],["have","have"]];
+}else if(tab=="q2"){var d=D[i];h+='<div class="q">Which one is correct?<span class="ar">أي جملة صحيحة؟</span></div><div class="opts" id="o"></div>';opts=shuf([[d[0],d[0]],[d[1],d[1]]]).map(function(x){return[x[0],x[1]]});
+}else if(tab=="q3"){var d=D[i];h+='<div class="emo">'+d[0]+'</div><div class="q" style="font-size:1.2rem">'+d[1]+'</div><div class="opts" id="o"></div>';opts=shuf([[d[2],d[2]],[d[3],d[3]]]);
+}else{var d=D[i];h+='<div class="q">'+d[0].replace(/\S+/g,"…").replace(/…/g,"")+'Put the words in order<span class="ar">رتّبي الكلمات: '+d[1]+'</span></div><div class="tray" id="tr" aria-live="polite"></div><div class="tray" id="bk" style="border-style:solid"></div><button class="next" id="ck">Check ✔ · تحقق</button>';}
+h+='<div class="fb" id="fb"></div></div>';app.innerHTML=h;
+if(tab=="q4"){build(d);return}
+var box=document.getElementById("o");
+var right=tab=="q1"?d[1]:tab=="q2"?d[2]:d[2];
+opts.forEach(function(o){var b=document.createElement("button");b.className="opt"+(tab=="q1"?" "+o[0]:"");b.textContent=o[1];b.onclick=function(){answer(b,o[0]==right,d,right)};box.appendChild(b)})}
+function answer(b,ok,d,right){
+var all=document.querySelectorAll(".opt");all.forEach(function(x){x.disabled=true;if(x.textContent==right)x.classList.add("right")});
+if(!ok)b.classList.add("wrong");else{score[tab]++;total()}
+var en=tab=="q1"?d[2]:right,ar=tab=="q1"?d[3]:tab=="q2"?d[3]:d[4];
+if(tab=="q1")en="Test: "+en;
+fin(ok,en,ar)}
+function fin(ok,en,ar){
+var f=document.getElementById("fb");f.innerHTML='<b style="color:'+(ok?"var(--ok)":"var(--bad)")+'">'+(ok?"⭐ Great!":"Oops! Try the next one.")+'</b><br>'+en+'<span class="ar">'+ar+'</span><button class="next" id="nx">Next ➜ التالي</button>';
+document.getElementById("nx").onclick=function(){idx[tab]++;step()}}
+function build(d){
+var words=d[0].split(" "),tr=document.getElementById("tr"),bk=document.getElementById("bk"),pick=[],done=false;
+var pool=shuf(words.map(function(w,i){return{w:w,i:i}}));
+function paint(){tr.innerHTML="";bk.innerHTML="";
+pick.forEach(function(p){var b=document.createElement("button");b.className="tile";b.textContent=p.w;b.onclick=function(){if(done)return;pick.splice(pick.indexOf(p),1);paint()};tr.appendChild(b)});
+pool.forEach(function(p){if(pick.indexOf(p)>-1)return;var b=document.createElement("button");b.className="tile";b.style.borderColor="var(--have)";b.style.background="var(--have2)";b.textContent=p.w;b.onclick=function(){if(done)return;pick.push(p);paint()};bk.appendChild(b)})}
+paint();
+document.getElementById("ck").onclick=function(){if(done)return;var s=pick.map(function(p){return p.w}).join(" "),ok=s==d[0];done=true;if(ok){score[tab]++;total()}
+fin(ok,d[0],d[1]);document.getElementById("ck").style.display="none"}}
+show();
+</script>
+</body>
+</html>
